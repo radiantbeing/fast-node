@@ -1,0 +1,36 @@
+{
+  "name": "fast-node",
+  "version": "0.0.0",
+  "author": "Inhwa Kim <inhwa.kim@kakao.com>",
+  "type": "module",
+  "bin": {
+    "fast": "./dist/main.js"
+  },
+  "scripts": {
+    "dev": "tsx ./src/main.tsx",
+    "build": "rm -rf ./dist && tsc --project tsconfig.build.json",
+    "preview": "node ./dist/main.js",
+    "test": "node --import tsx --test",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "volta": {
+    "node": "24.11.1"
+  },
+  "dependencies": {
+    "ink": "^6.5.1",
+    "react": "^19.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.2",
+    "@types/react": "^19.2.7",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^16.5.0",
+    "prettier": "^3.7.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0"
+  }
+}

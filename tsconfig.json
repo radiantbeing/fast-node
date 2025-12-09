@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    // 타입 검사
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+
+    // 모듈
+    "module": "nodenext",
+    "moduleResolution": "node16",
+    "rewriteRelativeImportExtensions": true,
+    "types": ["node"],
+
+    // 상호 운용성 제약
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+
+    // 상호 운용성 제약
+    "esModuleInterop": true,
+    "isolatedModules": true,
+
+    // 언어 및 환경
+    "jsx": "react-jsx",
+    "lib": ["ES2024"],
+    "target": "es2024",
+
+    // 완전성
+    "skipLibCheck": true
+  },
+  "include": ["./src/**/*", "./test/**/*"]
+}
