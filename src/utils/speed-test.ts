@@ -34,7 +34,7 @@ export async function* streamSpeedTestResult(
 ): AsyncGenerator<SpeedTestResult> {
   const { url = "https://fast.com", interval = 500 } = options;
 
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext();
   const page = await context.newPage();
 
