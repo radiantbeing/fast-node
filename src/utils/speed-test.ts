@@ -1,4 +1,13 @@
-import { chromium, type Locator } from "playwright";
+import { type Locator, chromium } from "playwright";
+
+export interface SpeedTestResult {
+  download: Metric;
+  upload: Metric;
+  latency: Metric;
+  bufferbloat: Metric;
+  client: ClientInformation;
+  server: ServerInformation;
+}
 
 interface Metric {
   value: number;
@@ -13,15 +22,6 @@ interface ClientInformation {
 
 interface ServerInformation {
   locations: string[];
-}
-
-interface SpeedTestResult {
-  download: Metric;
-  upload: Metric;
-  latency: Metric;
-  bufferbloat: Metric;
-  client: ClientInformation;
-  server: ServerInformation;
 }
 
 interface SpeedTestStreamOptions {
