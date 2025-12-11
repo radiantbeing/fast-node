@@ -5,6 +5,10 @@ export interface SpeedTestResult {
   upload: Metric;
   latency: Metric;
   bufferbloat: Metric;
+  downloadSucceeded: boolean;
+  uploadSucceeded: boolean;
+  latencySucceeded: boolean;
+  bufferbloatSucceeded: boolean;
   client: ClientInformation;
   server: ServerInformation;
 }
@@ -49,22 +53,25 @@ export async function* streamSpeedTestResult(
     const uploadSucceededLocator = page.locator("#upload-value.succeeded");
     const latencyValueLocator = page.locator("#latency-value");
     const latencyUnitLocator = page.locator("#latency-units");
+    const latencySucceededLocator = page.locator("#latency-value.succeeded");
     const bufferbloatValueLocator = page.locator("#bufferbloat-value");
     const bufferbloatUnitLocator = page.locator("#bufferbloat-units");
+    const bufferbloatSucceededLocator = page.locator(
+      "#bufferbloat-value.succeeded",
+    );
     const clientLocationLocator = page.locator("#user-location");
     const clientIPLocator = page.locator("#user-ip");
     const clientISPLocator = page.locator("#user-isp");
     const serverLocationsLocator = page.locator("#server-locations");
 
-    async function isSpeedTestSucceeded() {
-      return (
-        (await downloadSucceededLocator.count()) === 0 ||
-        (await uploadSucceededLocator.count()) === 0
-      );
+    async function isSucceeded(succeededLocator: Locator) {
+      return (await succeededLocator.count()) > 0;
     }
 
-    while (await isSpeedTestSucceeded()) {
-      yield {
+    let latestResult: SpeedTestResult;
+
+    do {
+      yield (latestResult = {
         download: {
           value: Number(await getTrimmedTextContent(downloadValueLocator)),
           unit: (await getTrimmedTextContent(downloadUnitLocator)) ?? "Mbps",
@@ -81,6 +88,10 @@ export async function* streamSpeedTestResult(
           value: Number(await getTrimmedTextContent(bufferbloatValueLocator)),
           unit: (await getTrimmedTextContent(bufferbloatUnitLocator)) ?? "ms",
         },
+        downloadSucceeded: await isSucceeded(downloadSucceededLocator),
+        uploadSucceeded: await isSucceeded(uploadSucceededLocator),
+        latencySucceeded: await isSucceeded(latencySucceededLocator),
+        bufferbloatSucceeded: await isSucceeded(bufferbloatSucceededLocator),
         client: {
           location:
             (await getTrimmedTextContent(clientLocationLocator)) ??
@@ -95,10 +106,10 @@ export async function* streamSpeedTestResult(
               /\s*\|\s*/,
             ) ?? [],
         },
-      } satisfies SpeedTestResult;
+      } satisfies SpeedTestResult);
 
       await page.waitForTimeout(interval);
-    }
+    } while (!latestResult.downloadSucceeded || !latestResult.uploadSucceeded);
   } finally {
     await context.close();
     await browser.close();
